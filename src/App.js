@@ -1,72 +1,43 @@
-import React, { Fragment, useState } from 'react'
-import Bcompnt from './Bcompnt'
-import View from './View'
-import Edit from './Edit'
+import React from 'react'
+import { Nav, NavLink } from 'react-bootstrap'
 
+import { useSelector,useDispatch } from 'react-redux'
+
+import {
+    decrement,
+    increment,
+    reset,
+    login,
+    logout,
+
+} from './Redux/Actions'
 const App = () => {
-  const userData = [
-    { id: 1, name: 'Tania', username: 'floppydisokkette' },
-    { id: 2, name: 'warm', username: 'floppy' },
-    { id: 3, name: 'sones', username: 'disokkette' },
-
-  ];
-  const initialFormState = { id: null, name: '', username: '' }
-  const [users, setUsers] = React.useState(userData)
-  const [currentUser, setCurrentUser] = React.useState(initialFormState)
-  const [editing, setEditing] = useState(false);
-  const addUser = (user) => {
-    user.id = users.length + 1;
-    setUsers([...users, user])
-  }
-  const deleteUser = id => {
-    setEditing(false)
-    setUsers(users.filter(user => user.id !== id))
-  }
-  const editRow = user => {
-    setEditing(true)
-    setCurrentUser({ id: user.id, name: user.name, username: user.username })
-  }
-  const updateUser = (id, updatedUser) => {
-    setEditing(false)
-
-    setUsers(users.map(user => (user.id === id ? updatedUser : user)))
-
-  }
+   const counter = useSelector((state)=>state.Counter)
+   console.warn(counter)
+   const auth = useSelector((state)=>state.Auth)
+   const dispatch = useDispatch();
   return (
     <>
-      <div className='"Container'>
-        <h1>Crud React app</h1></div>
-      <div className='flex-row' style={{ display: 'flex', justifyContent: 'space-between', }}>
-        <div className='flex-large'>
-          {editing ? (
-            <Fragment>
-
-              <h2>Edituser</h2>
-              <Edit
-                editing={editing}
-                setEditing={setEditing}
-                currentUser={currentUser}
-                updateUser={updateUser}
-                className="bg-success" />
-            </Fragment>
-
-          ) : (
-            <Fragment>
-              <h2>
-                <View adduser={addUser} /></h2>
-
-            </Fragment>
-          )
-
-          }
-        </div>
-        <div className='flex-large'>
-          <h2>view users</h2>
-          <Bcompnt users={users} editRow={editRow} deleteUser={deleteUser} />
-        </div>
-      </div>
-
-
+   <Nav className="bg-success">
+       <Nav.Link>Home</Nav.Link>
+   </Nav>
+    <h1 variant= "dark">REDUX</h1>
+    <h3>{counter}</h3>
+    <h4>Counter</h4>
+    <button className= "btn btn-warning"onClick={()=>dispatch(increment())}>increment</button>
+    <button className= "btn btn-success" onClick={()=>dispatch(reset())}>RESET</button>
+    <button className= "btn btn-muted" onClick={()=>dispatch(decrement())}>increment</button>
+    <h2>For loggins</h2>
+    <button className= "btn btn-danger" onClick={()=>dispatch(login())}>LOGIN</button>
+    <button className=' btn btn-primary' onClick={()=>dispatch(logout())}>LOGout</button>
+      {auth ?(<div>
+          <p>
+              I dont't more than 50%.but if oy
+          </p>
+      </div>):('Login ifirst')}
+    
+    
+    
     </>
   )
 }
